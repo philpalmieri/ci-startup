@@ -1,6 +1,20 @@
 <?php
 
 /*
+echo '<pre>';
+var_dump($GLOBALS);
+echo '</pre>';
+exit;
+*/
+
+/*
+ * ------------------------------------------------------
+ *  CIUnit Version
+ * ------------------------------------------------------
+ */
+	define('CIUnit_Version', '0.18-dev_for_CI2.1.0');
+
+/*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
  *---------------------------------------------------------------
@@ -18,54 +32,17 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-
-/****
- * uncomment the below switch/case to swap environment based on the current URL
- */
-
-/*
- * switch($_SERVER['SERVER_NAME'])
-{
-    case 'local.cistartup.com':
-        define('ENVIRONMENT', 'development');
-    break;
-    case 'testing.cistartup.com':
-        define('ENVIRONMENT', 'testing');
-    break;
-    default:
-        define('ENVIRONMENT', 'production');
-    break;
-}
-****/
-
-    //Comment the next line if you are using the above switch/case
-	define('ENVIRONMENT', 'development');
+	define('ENVIRONMENT', 'testing');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
  *---------------------------------------------------------------
  *
- * Different environments will require different levels of error reporting.
- * By default development will show errors but testing and live will hide them.
+ * By default CI runs with error reporting set to -1.
+ *
  */
 
-if (defined('ENVIRONMENT'))
-{
-	switch (ENVIRONMENT)
-	{
-		case 'development':
-			error_reporting(E_ALL);
-		break;
-	
-		case 'testing':
-		case 'production':
-			error_reporting(0);
-		break;
-
-		default:
-			exit('The application environment is not set correctly.');
-	}
-}
+	error_reporting(-1);
 
 /*
  *---------------------------------------------------------------
@@ -75,9 +52,14 @@ if (defined('ENVIRONMENT'))
  * This variable must contain the name of your "system" folder.
  * Include the path if the folder is not in the same  directory
  * as this file.
- *
+ * 
+ * NO TRAILING SLASH!
+ * 
+ * The test should be run from inside the tests folder.  The assumption
+ * is that the tests folder is in the same directory path as system.  If
+ * it is not, update the paths appropriately.
  */
-	$system_path = '../system';
+	$system_path = dirname(__FILE__) . '/../../../system';
 
 /*
  *---------------------------------------------------------------
@@ -91,39 +73,28 @@ if (defined('ENVIRONMENT'))
  * http://codeigniter.com/user_guide/general/managing_apps.html
  *
  * NO TRAILING SLASH!
- *
+ * 
+ * The tests should be run from inside the tests folder.  The assumption
+ * is that the tests folder is in the same directory as the application
+ * folder.  If it is not, update the path accordingly.
  */
-	$application_folder = '../application';
-
+	$application_folder = dirname(__FILE__) . '/../..';
+		
 /*
- * --------------------------------------------------------------------
- * DEFAULT CONTROLLER
- * --------------------------------------------------------------------
+ *---------------------------------------------------------------
+ * VIEW FOLDER NAME
+ *---------------------------------------------------------------
+ * 
+ * If you want to move the view folder out of the application 
+ * folder set the path to the folder here. The folder can be renamed
+ * and relocated anywhere on your server. If blank, it will default 
+ * to the standard location inside your application folder.  If you 
+ * do move this, use the full server path to this folder 
  *
- * Normally you will set your default controller in the routes.php file.
- * You can, however, force a custom routing by hard-coding a
- * specific controller class/function here.  For most applications, you
- * WILL NOT set your routing here, but it's an option for those
- * special instances where you might want to override the standard
- * routing in a specific front controller that shares a common CI installation.
- *
- * IMPORTANT:  If you set the routing here, NO OTHER controller will be
- * callable. In essence, this preference limits your application to ONE
- * specific controller.  Leave the function name blank if you need
- * to call functions dynamically via the URI.
- *
- * Un-comment the $routing array below to use this feature
+ * NO TRAILING SLASH!
  *
  */
-	// The directory name, relative to the "controllers" folder.  Leave blank
-	// if your controller is not in a sub-folder within the "controllers" folder
-	// $routing['directory'] = '';
-
-	// The controller class file name.  Example:  Mycontroller
-	// $routing['controller'] = '';
-
-	// The controller function you wish to be called.
-	// $routing['function']	= '';
+	$view_folder = '';	
 
 
 /*
@@ -144,6 +115,30 @@ if (defined('ENVIRONMENT'))
 	// $assign_to_config['name_of_config_item'] = 'value of config item';
 
 
+/**
+ * --------------------------------------------------------------
+ * CIUNIT FOLDER NAME
+ * --------------------------------------------------------------
+ * 
+ * Typically this folder will be within the application's third-party
+ * folder.  However, you can place the folder in any directory.  Just
+ * be sure to update this path.
+ *
+ * NO TRAILING SLASH!
+ *
+ */
+	$ciunit_folder = dirname(__FILE__);
+
+/**
+ * --------------------------------------------------------------
+ * UNIT TESTS FOLDER NAME
+ * --------------------------------------------------------------
+ *
+ * This is the path to the tests folder.
+ */
+	$tests_folder = dirname(__FILE__) . "/../../../tests";
+
+
 
 // --------------------------------------------------------------------
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
@@ -155,11 +150,13 @@ if (defined('ENVIRONMENT'))
  * ---------------------------------------------------------------
  */
 
+/* This chdir() causes error when run tests by folder.
 	// Set the current directory correctly for CLI requests
 	if (defined('STDIN'))
 	{
 		chdir(dirname(__FILE__));
 	}
+*/
 
 	if (realpath($system_path) !== FALSE)
 	{
@@ -200,7 +197,7 @@ if (defined('ENVIRONMENT'))
 	// The path to the "application" folder
 	if (is_dir($application_folder))
 	{
-		define('APPPATH', $application_folder.'/');
+		define('APPPATH', realpath($application_folder) . '/');
 	}
 	else
 	{
@@ -209,8 +206,42 @@ if (defined('ENVIRONMENT'))
 			exit("Your application folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
 		}
 
-		define('APPPATH', BASEPATH.$application_folder.'/');
+		define('APPPATH', realpath(BASEPATH.$application_folder) . '/');
 	}
+	
+	// The path to the "views" folder
+	if (is_dir($view_folder)) 
+	{
+		define ('VIEWPATH', $view_folder .'/');
+	}
+	else 
+	{
+		if ( ! is_dir(APPPATH.'views/'))
+		{
+			exit("Your view folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
+		}
+				
+		define ('VIEWPATH', APPPATH.'views/' );	
+	}
+	
+	// The path to CIUnit
+	if (is_dir($ciunit_folder))
+	{
+		define('CIUPATH', $ciunit_folder . '/');
+	}
+	else
+	{
+		if ( ! is_dir(APPPATH . 'third_party/' . $ciunit_folder))
+		{
+			exit("Your CIUnit folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
+		}
+		
+		define ('CIUPATH', APPPATH . 'third_party/' . $ciunit_folder);
+	}
+	
+	
+	// The path to the Tests folder
+	define('TESTSPATH', realpath($tests_folder) . '/');
 
 /*
  * --------------------------------------------------------------------
@@ -220,7 +251,28 @@ if (defined('ENVIRONMENT'))
  * And away we go...
  *
  */
-require_once BASEPATH.'core/CodeIgniter.php';
 
-/* End of file index.php */
-/* Location: ./index.php */
+// Load the CIUnit CodeIgniter Core
+require_once CIUPATH . 'core/CodeIgniter.php';
+
+// Autoload the PHPUnit Framework
+require_once ('PHPUnit/Autoload.php');
+
+// Load the CIUnit Framework
+require_once CIUPATH. 'libraries/CIUnit.php';
+
+//=== and off we go ===
+$CI =& set_controller('CIU_Controller', CIUPATH . 'core/');
+$CI->load->add_package_path(CIUPATH);
+
+require_once(CIUPATH . 'libraries/spyc/spyc.php');
+
+CIUnit::$spyc = new Spyc();
+
+require_once(CIUPATH . 'libraries/Fixture.php');
+
+$CI->fixture = new Fixture();
+CIUnit::$fixture =& $CI->fixture;
+
+/* End of file bootstrap_phpunit.php */
+/* Location: ./application/third_party/CIUnit/bootstrap_phpunit.php */
