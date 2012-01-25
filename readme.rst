@@ -33,7 +33,7 @@ Current Master Branch has the following running
 
 * Codeigniter 2.1.0
 * CIUnit for CI 2.1 (by Kenji)
-* wiredesignz HMVC
+* wiredesignz HMVC v5.4
 * Phil Sturgeon's REST API
 * Phil Palmieri's URL based Template System
 
