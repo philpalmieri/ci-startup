@@ -22,7 +22,8 @@ Installation
 
 Pull/Extract code into a directory...
 
-for Pear and PHPUnit - and Selenium, read PHPUnit instructions below
+for Pear and PHPUnit - and Selenium, read PHPUnit instructions at
+http://d.hatena.ne.jp/Kenji_s/20120117/1326763908
 
 ************
 Included Releases
