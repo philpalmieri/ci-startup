@@ -106,7 +106,7 @@ class View
   public function partial_parse($html, $values, $return = TRUE)
   {
     foreach($values as $F=>$R) {
-      $html = str_replace("{".$F."}", $R, $html);
+      $html = str_replace('{'.$F.'}', $R, $html);
     }
     ob_start();
     print($html);
@@ -119,14 +119,23 @@ class View
   
   public function parse($path, $values, $return = TRUE)
   {
-    ob_start();
-    extract($values, EXTR_SKIP);
-    include($path);
-    if ($return === TRUE) {
-      $buffer = ob_get_contents();
-      @ob_end_clean();
-      return $buffer;
-    }
+  	if(!$this->_CI->input->is_cli_request())
+	{
+		ob_start();
+    	extract($values, EXTR_SKIP);
+    	include($path);
+    	if ($return === TRUE) {
+      		$buffer = ob_get_contents();
+      		@ob_end_clean();
+      		return $buffer;
+    	}
+		@ob_end_clean();
+	}
+	else
+	{
+		return '';	
+	}
+
   }
   
   /**/
