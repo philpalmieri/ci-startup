@@ -32,7 +32,8 @@ Included Releases
 Current Master Branch has the following running
 
 * Codeigniter 2.1.0
-* CIUnit for CI 2.1 (by Kenji)
+* CIUnit for CI 2.1 (by Kenji) 
+* * Added functional tests for use with Selenium
 * wiredesignz HMVC v5.4 (Still working on implementing)
 * Phil Sturgeon's REST API
 * Phil Palmieri's URL based Template System
