@@ -1,5 +1,5 @@
 ###################
-What is CIStartup
+THIS BRANCH IS BROKEN - DO NOT USE! (Yet) What is CIStartup
 ###################
 
 CodeIgniter Startup is my personal collection of useful tools to get a project running instantly.
