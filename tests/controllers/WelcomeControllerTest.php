@@ -11,7 +11,7 @@ class WelcomeControllerTests extends CIUnit_TestCase
     public function setUp()
     {
         // Set the tested controller
-        $this->CI = set_controller('welcome');
+        $this->CI->loader->_load_controller('welcome/welcome');
     }
 
     public function testRepeat()
