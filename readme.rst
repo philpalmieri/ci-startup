@@ -37,6 +37,7 @@ Current Master Branch has the following running
 * wiredesignz HMVC v5.4 (Still working on implementing)
 * Phil Sturgeon's REST API
 * Phil Palmieri's URL based Template System
+* FirePHP
 
 
 ************
