@@ -36,6 +36,8 @@ class Welcome extends CI_Controller {
 	 * */
 	public function index()
 	{
+		//FirePHP..
+		$this->firephp->log('Yo! FirePHP Installed!');
 		$this->view->render();
 	}
 
