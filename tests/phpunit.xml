@@ -5,7 +5,7 @@
     stopOnFailure="false" 
     bootstrap="../application/third_party/CIUnit/bootstrap_phpunit.php">
     <php>
-        <server name="SERVER_NAME" value="http://example.com" />
+        <server name="SERVER_NAME" value="http://local.cistartup.com" />
     </php>
     <testsuites>
         <testsuite name="ControllerTests">
@@ -23,8 +23,8 @@
         <testsuite name="SystemTests">
             <directory suffix=".php">system</directory>
         </testsuite>
-	<testsuite name="FunctionalTests">
+		<!-- <testsuite name="FunctionalTests">
             <directory suffix=".php">functional</directory>
-        </testsuite>
+        </testsuite> -->
     </testsuites>
 </phpunit>

@@ -1,5 +1,6 @@
 .DS_Store
 .idea
+.project
 
 application/cache/*
 !application/cache/index.html
