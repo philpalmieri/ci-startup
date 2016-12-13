@@ -1,4 +1,8 @@
 ###################
+DO NOT USE THIS - CI IS DEAD, YOU SHOULD NOT BE USING IT, IT IS TERRIBLE
+###################
+
+###################
 What is CIStartup
 ###################
 
